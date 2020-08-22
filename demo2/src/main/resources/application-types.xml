@@ -1,0 +1,40 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<types:mule xmlns:types="http://www.mulesoft.org/schema/mule/types">
+  <types:catalog>
+    <types:type name="create" format="csv">
+      <types:shape format="weave"><![CDATA[%dw 2.0
+
+type create = Array<{|  CustomerID: Number,   CustomerName: String,   ContactName: String,   Address: String,   City: String,   PostalCode: String,   Country: String|}> {"isQuotedString": "false",
+"header": "true",
+"headerLineNumber": "0"}
+
+]]></types:shape>
+      <types:properties>
+        <types:property name="headerLineNumber" value="0"/>
+        <types:property name="header" value="true"/>
+        <types:property name="isQuotedString" value="false"/>
+      </types:properties>
+    </types:type>
+    <types:type name="demo" format="json">
+      <types:shape format="weave" example="examples/New Text Document (3).txt"><![CDATA[%dw 2.0
+
+type demo = Array<{|  CustomerID: Number {"typeId": "int"},   CustomerName: String,   ContactName: String,   Address: String,   City: String,   PostalCode: String,   Country: String|}> {"example": "[{\\\"CustomerID\\\":43,\\\"CustomerName\\\":\\\"Alfreds Futterkiste\\\",\\\"ContactName\\\":\\\"Maria Anders\\\",\\\"Address\\\":\\\"Obere Str. 57\\\",\\\"City\\\":\\\"Berlin\\\",\\\"PostalCode\\\":\\\"12209\\\",\\\"Country\\\":\\\"Germany\\\"}]"}
+
+]]></types:shape>
+    </types:type>
+  </types:catalog>
+  <types:enrichment select="#0a14c39d-a47c-47ca-a20b-a9be69ddbfc5">
+    <types:processor-declaration>
+      <types:input-event>
+        <types:message>
+          <types:payload type="create"/>
+        </types:message>
+      </types:input-event>
+      <types:output-event>
+        <types:message>
+          <types:payload type="demo"/>
+        </types:message>
+      </types:output-event>
+    </types:processor-declaration>
+  </types:enrichment>
+</types:mule>

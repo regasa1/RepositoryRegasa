@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:db="http://www.mulesoft.org/schema/mule/db" xmlns:batch="http://www.mulesoft.org/schema/mule/batch"
+	xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns:file="http://www.mulesoft.org/schema/mule/file" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/file http://www.mulesoft.org/schema/mule/file/current/mule-file.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/batch http://www.mulesoft.org/schema/mule/batch/current/mule-batch.xsd
+http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd">
+	<file:config name="File_Config" doc:name="File Config" doc:id="ee4b7c98-f2a8-44ba-a283-6539b75b28cb" />
+	<db:config name="Database_Config" doc:name="Database Config" doc:id="435e7ffc-ed79-4ee5-a6a4-a4b3184eec1d" >
+		<db:my-sql-connection host="localhost" port="3306" user="root" password="Regasa092369" database="employee" />
+	</db:config>
+	<flow name="demo2Flow" doc:id="e1facd64-c5ff-412e-95d4-7d51359f30e4" >
+		<scheduler doc:name="Scheduler" doc:id="dc22e667-cac4-4548-8ebf-dfd6770089f3" >
+			<scheduling-strategy >
+				<fixed-frequency frequency="2000"/>
+			</scheduling-strategy>
+		</scheduler>
+		<file:read doc:id="451362af-faa6-49b5-a642-7ec7b4c5beb9" config-ref="File_Config" path="C:\Users\regas\Documents\json\raml data cust info\customer.csv"/>
+		<ee:transform doc:name="Transform Message" doc:id="0a14c39d-a47c-47ca-a20b-a9be69ddbfc5" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload map ( payload01 , indexOfPayload01 ) -> {
+	CustomerID: payload01.CustomerID,
+	CustomerName: payload01.CustomerName,
+	ContactName: payload01.ContactName,
+	Address: payload01.Address,
+	City: payload01.City,
+	PostalCode: payload01.PostalCode,
+	Country: payload01.Country
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<logger level="INFO" doc:name="Logger" doc:id="22f713b1-cc4f-4527-9e4b-ab60184ed5c1" message="#[payload]"/>
+		<batch:job jobName="demo2Batch_Job" doc:id="565119d9-b8bc-4b39-acd3-b36c51ea4ccc" >
+			<batch:process-records >
+				<batch:step name="Batch_Step" doc:id="b365f1e1-ca0d-4a99-b301-a0355b7e6986" >
+					<ee:transform doc:name="Transform Message" doc:id="cdad0f64-2966-4e56-a242-413439996e82" >
+						<ee:message >
+							<ee:set-payload ><![CDATA[%dw 2.0
+output application/java
+---
+payload]]></ee:set-payload>
+						</ee:message>
+					</ee:transform>
+					<batch:aggregator doc:name="Batch Aggregator" doc:id="bc55e033-abee-49e6-bdc7-dae8d8951804" size="50">
+						<db:bulk-insert doc:name="Bulk insert" doc:id="dc5e68e0-8fcd-430c-90a7-fbe8ec5cdd5d" config-ref="Database_Config">
+							<db:sql ><![CDATA[INSERT INTO customer (CustomerID, CustomerName, ContactName, Address, City, PostalCode, Country)
+VALUES (null, :CustomerName, :ContactName, :Address, :City, :PostalCode, :Country)]]></db:sql>
+						</db:bulk-insert>
+					</batch:aggregator>
+				</batch:step>
+			</batch:process-records>
+			<batch:on-complete >
+				<logger level="INFO" doc:name="Logger" doc:id="278a24c4-28b5-454d-b528-34b23aeb7d8c" message="message done"/>
+			</batch:on-complete>
+		</batch:job>
+	</flow>
+</mule>
