@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:nexmo-messages-api="http://www.mulesoft.org/schema/mule/nexmo-messages-api" xmlns:validation="http://www.mulesoft.org/schema/mule/validation"
+	xmlns:sockets="http://www.mulesoft.org/schema/mule/sockets"
+	xmlns:file="http://www.mulesoft.org/schema/mule/file" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:db="http://www.mulesoft.org/schema/mule/db" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/file http://www.mulesoft.org/schema/mule/file/current/mule-file.xsd
+http://www.mulesoft.org/schema/mule/sockets http://www.mulesoft.org/schema/mule/sockets/current/mule-sockets.xsd
+http://www.mulesoft.org/schema/mule/validation http://www.mulesoft.org/schema/mule/validation/current/mule-validation.xsd
+http://www.mulesoft.org/schema/mule/nexmo-messages-api http://www.mulesoft.org/schema/mule/nexmo-messages-api/current/mule-nexmo-messages-api.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="57c562c7-80dd-4df3-aede-d3632581974f" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<db:config name="Database_Config" doc:name="Database Config" doc:id="a14fbca2-a592-49e5-9deb-2196ccb411ad" >
+		<db:my-sql-connection host="dev.icraftsoft.net" port="3306" user="trainee" password="shoppingCl@55" database="craftshopping" />
+	</db:config>
+	<db:config name="Database_Config1" doc:name="Database Config" doc:id="54716533-58cd-4863-ab2f-92efb153cb91" >
+		<db:my-sql-connection host="localhost" port="3306" user="root" password="Regasa092369" database="craftemployee" />
+	</db:config>
+	<db:config name="Database_Config2" doc:name="Database Config" doc:id="625c5b7b-49c0-4e63-8de1-8ec5e129dff3" >
+		<db:my-sql-connection host="localhost" port="3306" user="root" password="Regasa092369" database="employee" />
+	</db:config>
+	<http:listener-config name="HTTP_Listener_config5" doc:name="HTTP Listener config" doc:id="5838553a-dd27-49df-912d-5d41d4c87db0" >
+		<http:listener-connection host="0.0.0.0" port="8085" />
+	</http:listener-config>
+	<http:listener-config name="HTTP_Listener_config6" doc:name="HTTP Listener config" doc:id="fcc506ca-59cb-42a9-b708-d7e5909dd52e" >
+		<http:listener-connection host="0.0.0.0" port="8086" />
+	</http:listener-config>
+	<http:listener-config name="HTTP_Listener_config7" doc:name="HTTP Listener config" doc:id="1fba7ff8-61e4-4a2e-9140-d3948ad25205" >
+		<http:listener-connection host="0.0.0.0" port="8087" />
+	</http:listener-config>
+	<validation:config name="Validation_Config" doc:name="Validation Config" doc:id="455e1602-492d-4dc7-9e98-67ca9a6927ff" />
+	<flow name="assigmentsFlow1" doc:id="1f7f292c-da87-4b94-beaf-eab805247384" >
+		<http:listener doc:name="Listener" doc:id="9f576095-16bb-4084-8ecd-1f6ee44ecc64" config-ref="HTTP_Listener_config" path="/assigment1"/>
+		<db:select doc:name="Select" doc:id="5e71962a-c184-4b3e-b651-6e75382665c5" config-ref="Database_Config">
+			<db:sql ><![CDATA[select  *  from products]]></db:sql>
+		</db:select>
+		<ee:transform doc:name="Transform Message" doc:id="4c435da7-6266-409b-b439-a943d01c84fb" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload filter $.price >=5500 map (value, index)->{
+	productid: value.productid,
+	categoryid: value.categoryid,
+	name: value.name,
+	description: value.description,
+	video_url: value.video_url,
+	price: value.price
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<db:bulk-insert doc:name="Bulk insert" doc:id="0d0ca3d8-088b-447f-a455-f86bda420e0a" config-ref="Database_Config2">
+			<db:sql ><![CDATA[insert into `products` (productid, categoryid, name,  description, video_url, price) 
+values (:productid, :categoryid, :name, :description, :video_url, :price)]]></db:sql>
+		</db:bulk-insert>
+		<ee:transform doc:name="Transform Message" doc:id="d04095ff-73cb-4958-b24b-2bcf5de14266">
+			<ee:message>
+				<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{"data" : "inserted"}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+	<flow name="assigmentsFlow2" doc:id="49fade18-1a42-4551-9b90-c8c2b9b54fcc" >
+		<http:listener doc:name="Listener" doc:id="fa73dab1-c4e8-4c90-aaf9-be6a443d479c" config-ref="HTTP_Listener_config5" path="/assigment2"/>
+		<set-variable value="#[attributes.queryParams.resource]" doc:name="Set Variable" doc:id="19665b3a-ec37-417d-a272-3fd14415a8a7" variableName="resource"/>
+		<choice doc:name="Choice" doc:id="72c78235-3510-4ad3-9076-01a6841f0e3e" >
+			<when expression='#[vars.resource=="users"]'>
+				<db:select doc:name="Select" doc:id="cb477342-7d9c-40bf-95ef-6324def1d453" config-ref="Database_Config">
+					<db:sql ><![CDATA[select * from users]]></db:sql>
+				</db:select>
+			</when>
+			<when expression='#[vars.resource == "products"]'>
+				<db:select doc:name="Select" doc:id="ba2675b3-779f-4212-9476-854c7966388f" config-ref="Database_Config">
+					<db:sql ><![CDATA[select  *  from products]]></db:sql>
+				</db:select>
+			</when>
+			<otherwise >
+				<set-payload value="no resource available please choose user or products table {error code 404}" doc:name="Set Payload" doc:id="6f5763fa-6549-474d-a24b-e4e0bcfdcbdd" />
+			</otherwise>
+		</choice>
+	</flow>
+	<flow name="assigmentsFlow3" doc:id="b5a71c58-eaad-4efe-b2c2-aec6826bb5db" >
+		<http:listener doc:name="Listener" doc:id="d3f9edaf-c3df-42c0-8f40-0918574cc818" config-ref="HTTP_Listener_config6" path="/assigment3"/>
+		<db:select doc:name="Select" doc:id="bacc9714-97de-4991-8596-0018210b4ec6" config-ref="Database_Config">
+			<db:sql ><![CDATA[select * from orders]]></db:sql>
+		</db:select>
+		<ee:transform doc:name="Transform Message" doc:id="48ff9992-c486-4591-9f4a-2496969b2c1b" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+var group1 = payload filter ($.amount > 5000) map ((item, index) -> {
+      amount: item.amount,
+      orderid: item.orderid,
+      created: item.created,
+      discountid: item.discountid,
+      userid: item.userid,
+      addressid: item.addressid,
+      status: item.status
+  }) groupBy $.status
+var group2 = payload filter ($.amount < 5000) map ((item, index) -> {
+      amount: item.amount,
+      orderid: item.orderid,
+      created: item.created,
+      discountid: item.discountid,
+      userid: item.userid,
+      addressid: item.addressid,
+      status: item.status
+  }) groupBy $.status 
+---
+group1 ++ group2]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<file:write doc:id="2036a5c0-7d19-4493-a646-546834f227c6" path="C:\Users\regas\Documents\json\file write.txt" mode="APPEND"/>
+	</flow>
+	<flow name="assigmentsFlow" doc:id="74216f68-dc55-4f75-afe6-a410298ded29" >
+		<http:listener doc:name="Listener" doc:id="ce7f22c9-5467-4d4c-af51-e8502bd8655c" config-ref="HTTP_Listener_config7" path="/assigment4"/>
+		<choice doc:name="Choice" doc:id="d27ca7e6-e456-4d6d-b0a8-46c62ef9426e" >
+			<when expression='#[attributes.queryParams.num &lt; 10]'>
+				<choice doc:name="Choice" doc:id="3759787f-0b69-456a-a86d-76ead926482e" >
+					<when expression='#[attributes.queryParams.num == "1"]'>
+						<set-payload value="num is equal to 1" doc:name="Set Payload" doc:id="e0084a8d-5f81-44e7-a2ef-9a3044ef0e46" />
+					</when>
+					<otherwise >
+						<set-payload value="num is less than 10" doc:name="Set Payload" doc:id="bb3e0428-5cc8-4d25-a359-36c3f8095297" />
+					</otherwise>
+				</choice>
+			</when>
+			<when expression='#[attributes.queryParams.num == "10"]'>
+				<set-payload value="num is equal 10" doc:name="Set Payload" doc:id="40f7446a-34ee-4ece-b5df-d2918087c233" />
+			</when>
+			<otherwise >
+				<set-payload value="num is greater than 10" doc:name="Set Payload" doc:id="4d8392b6-7761-4245-9c56-e076e094439f" />
+			</otherwise>
+		</choice>
+	</flow>
+</mule>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:munit="http://www.mulesoft.org/schema/mule/munit" xmlns:munit-tools="http://www.mulesoft.org/schema/mule/munit-tools"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xsi:schemaLocation="
+		http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+		http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd
+		http://www.mulesoft.org/schema/mule/munit-tools  http://www.mulesoft.org/schema/mule/munit-tools/current/mule-munit-tools.xsd">
+	<munit:config name="new-test-suite.xml" />
+	<munit:test name="new-test-suite-assigmentsFlow1Test" doc:id="61298332-68ee-45a3-ab8f-e3c47b9fdb63" description="Test">
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to assigmentsFlow1" doc:id="1c7e8d0a-9432-467a-832a-125f75c5fdd2" name="assigmentsFlow1"/>
+		</munit:execution>
+	</munit:test>
+	<munit:test name="new-test-suite-assigmentsFlow2Test" doc:id="21a0f262-f7ad-45d1-8dda-aab29190bf15" description="Test">
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to assigmentsFlow2" doc:id="3a5e52c8-16fc-403c-bef0-fdfc9e696d52" name="assigmentsFlow2"/>
+		</munit:execution>
+	</munit:test>
+	<munit:test name="new-test-suite-assigmentsFlow3Test" doc:id="fc2a00c7-2a5b-4803-b5dd-d1629d66c733" description="Test">
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to assigmentsFlow3" doc:id="08976d44-7bc7-4138-8858-2c4db8564608" name="assigmentsFlow3"/>
+		</munit:execution>
+	</munit:test>
+	<munit:test name="new-test-suite-assigmentsFlowTest" doc:id="263b2854-b0ca-4e23-956f-6423f9668ba0" description="Test">
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to assigmentsFlow" doc:id="797b40c0-3139-4e82-b634-14b234eb63d5" name="assigmentsFlow"/>
+		</munit:execution>
+	</munit:test>
+
+
+</mule>
