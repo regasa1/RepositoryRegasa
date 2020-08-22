@@ -1,0 +1,13 @@
+{
+  "sampleData": {
+    "e8714bfa-087f-419f-a524-e30054894b6c": {
+      "payload": "sample_data/list_json.json"
+    },
+    "e577bb74-cd74-4b71-bdaa-9c3c7e58ffee": {
+      "payload": "sample_data/employeers.xml"
+    },
+    "68091d0f-3066-458b-86cc-b76a5e1b97d3": {
+      "payload": "sample_data/list_json_1.json"
+    }
+  }
+}

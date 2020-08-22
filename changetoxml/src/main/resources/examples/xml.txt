@@ -1,0 +1,11 @@
+
+<user>
+	<id></id>
+	<firstname></firstname>
+	<lastname></lastname>
+	<middlename></middlename>
+	<city></city>
+	<state></state>
+	<address></address>
+	<email></email>
+</user>

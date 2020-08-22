@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<types:mule xmlns:types="http://www.mulesoft.org/schema/mule/types">
+  <types:catalog>
+    <types:type name="name" format="json">
+      <types:shape format="weave" example="examples/json.txt"><![CDATA[%dw 2.0
+
+type name = Array<{|  id: String,   firstname: String,   middlename: String,   lastname: String,   city: String,   state: String,   address: String,   email: String|}> {"example": "[{\\\"id\\\":\\\"693cacff-147d-4b84-add8-dad773730508\\\",\\\"firstname\\\":\\\"piter\\\",\\\"middlename\\\":\\\"gg\\\",\\\"lastname\\\":\\\"gg\\\",\\\"city\\\":\\\"jj\\\",\\\"state\\\":\\\"New York\\\",\\\"address\\\":\\\"gg\\\",\\\"email\\\":\\\"ggh@hh.nn\\\"},{\\\"id\\\":\\\"589ddfcv-44dse-4b84-add8-dad773730508\\\",\\\"firstname\\\":\\\"Mike\\\",\\\"middlename\\\":\\\"Tom\\\",\\\"lastname\\\":\\\"cc\\\",\\\"city\\\":\\\"kk\\\",\\\"state\\\":\\\"Califo\\\",\\\"address\\\":\\\"oo\\\",\\\"email\\\":\\\"mikee@hh.nn\\\"}]"}
+
+]]></types:shape>
+    </types:type>
+    <types:type name="user" format="xml">
+      <types:example format="xml" element="user" location="examples/xml.txt"/>
+    </types:type>
+    <types:type name="re" format="xml">
+      <types:example format="xml" element="employeers" location="examples/New Text Document.txt"/>
+    </types:type>
+    <types:type name="json" format="json">
+      <types:shape format="weave" example="examples/json-1.txt"><![CDATA[%dw 2.0
+
+type json = Array<{|  id: String,   firstname: String,   middlename: String,   lastname: String,   city: String,   state: String,   address: String,   email: String|}> {"example": "[{\\\"id\\\":\\\"693cacff-147d-4b84-add8-dad773730508\\\",\\\"firstname\\\":\\\"piter\\\",\\\"middlename\\\":\\\"gg\\\",\\\"lastname\\\":\\\"gg\\\",\\\"city\\\":\\\"jj\\\",\\\"state\\\":\\\"New York\\\",\\\"address\\\":\\\"gg\\\",\\\"email\\\":\\\"ggh@hh.nn\\\"},{\\\"id\\\":\\\"589ddfcv-44dse-4b84-add8-dad773730508\\\",\\\"firstname\\\":\\\"Mike\\\",\\\"middlename\\\":\\\"Tom\\\",\\\"lastname\\\":\\\"cc\\\",\\\"city\\\":\\\"kk\\\",\\\"state\\\":\\\"Califo\\\",\\\"address\\\":\\\"oo\\\",\\\"email\\\":\\\"mikee@hh.nn\\\"}]"}
+
+]]></types:shape>
+    </types:type>
+  </types:catalog>
+</types:mule>
