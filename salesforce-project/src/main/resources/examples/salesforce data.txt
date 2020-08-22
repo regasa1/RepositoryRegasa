@@ -1,0 +1,30 @@
+
+[{
+      "empName": "regasademo",
+      "empPhone": "10074878",
+      "empEmail": "demost@gmail.com",
+      "empSkills": "gtehvasjhjhajhad"
+      
+    },
+   {
+      "empName": "regasademo",
+      "empPhone": "10074878",
+      "empEmail": "demost@gmail.com",
+      "empSkills": "gtehvasjhjhajhad"
+      
+    }, 
+   {
+      "empName": "regasademo",
+      "empPhone": "10074878",
+      "empEmail": "demost@gmail.com",
+      "empSkills": "gtehvasjhjhajhad"
+      
+  },
+ {
+      "empName": "regasademo",
+      "empPhone": "10074878",
+      "empEmail": "demost@gmail.com",
+      "empSkills": "gtehvasjhjhajhad"
+      
+    }]
+   

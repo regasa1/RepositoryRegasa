@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:sockets="http://www.mulesoft.org/schema/mule/sockets" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns:salesforce="http://www.mulesoft.org/schema/mule/salesforce"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/salesforce http://www.mulesoft.org/schema/mule/salesforce/current/mule-salesforce.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/sockets http://www.mulesoft.org/schema/mule/sockets/current/mule-sockets.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="4618398c-83cc-485c-a4e9-6d97d1eae488" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<salesforce:sfdc-config name="Salesforce_Config" doc:name="Salesforce Config" doc:id="de8af1d1-6802-4492-930e-b2de08c468d9" >
+		<salesforce:basic-connection username="regasa_c@yahoo.com" password="Regasa092369" securityToken="OsoeRSy4S8ZiZbhxyJQccuPQd" />
+	</salesforce:sfdc-config>
+	<flow name="salesforce-projectFlow" doc:id="8dd4cb58-3273-4d2e-bc2d-04f4ac0a78b2" >
+		<http:listener doc:name="Listener" doc:id="dde33ebb-52ee-4122-b530-ff0751e44f8a" config-ref="HTTP_Listener_config" path="/salesforce" allowedMethods="POST"/>
+		<ee:transform doc:name="Transform Message" doc:id="93fcce8b-fa7d-491d-9fb2-9e9a3d0f3acf" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/java
+---
+payload]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<salesforce:create doc:name="Create" doc:id="6ffb92fa-4412-475b-a3a2-470d95efbd69" config-ref="Salesforce_Config" type="ethiopia__c"/>
+		<ee:transform doc:name="Transform Message" doc:id="2901b022-a477-4644-9de5-e6ec50be31ac" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+"message": "seccussfully updated"]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+</mule>

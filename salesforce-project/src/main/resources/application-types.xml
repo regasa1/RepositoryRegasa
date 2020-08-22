@@ -1,0 +1,37 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<types:mule xmlns:types="http://www.mulesoft.org/schema/mule/types">
+  <types:catalog>
+    <types:type name="contact" format="json">
+      <types:shape format="weave" example="examples/salesforce2.txt"><![CDATA[%dw 2.0
+
+type contact = Array<{|  amount: Number {"typeId": "int"},   orderid: Number {"typeId": "int"},   created: String,   discountid: Number {"typeId": "int"},   userid: Number {"typeId": "int"},   addressid: Number {"typeId": "int"},   status: String|}> {"example": "[{\\\"amount\\\":10000,\\\"orderid\\\":100,\\\"created\\\":\\\"2020-02-02T00:00:00\\\",\\\"discountid\\\":12,\\\"userid\\\":1000,\\\"addressid\\\":200,\\\"status\\\":\\\"shipped\\\"},{\\\"amount\\\":20000,\\\"orderid\\\":400,\\\"created\\\":\\\"2020-02-02T00:00:00\\\",\\\"discountid\\\":null,\\\"userid\\\":1000,\\\"addressid\\\":200,\\\"status\\\":\\\"shipped\\\"}]"}
+
+]]></types:shape>
+    </types:type>
+    <types:type name="meta_data" format="json">
+      <types:shape format="weave" example="examples/salesforce data.txt"><![CDATA[%dw 2.0
+
+type meta_data = Array<{|  empName: String,   empPhone: String,   empEmail: String,   empSkills: String|}> {"example": "[{\\\"empName\\\":\\\"regasademo\\\",\\\"empPhone\\\":\\\"10074878\\\",\\\"empEmail\\\":\\\"demost@gmail.com\\\",\\\"empSkills\\\":\\\"gtehvasjhjhajhad\\\"},{\\\"empName\\\":\\\"regasademo\\\",\\\"empPhone\\\":\\\"10074878\\\",\\\"empEmail\\\":\\\"demost@gmail.com\\\",\\\"empSkills\\\":\\\"gtehvasjhjhajhad\\\"},{\\\"empName\\\":\\\"regasademo\\\",\\\"empPhone\\\":\\\"10074878\\\",\\\"empEmail\\\":\\\"demost@gmail.com\\\",\\\"empSkills\\\":\\\"gtehvasjhjhajhad\\\"},{\\\"empName\\\":\\\"regasademo\\\",\\\"empPhone\\\":\\\"10074878\\\",\\\"empEmail\\\":\\\"demost@gmail.com\\\",\\\"empSkills\\\":\\\"gtehvasjhjhajhad\\\"}]"}
+
+]]></types:shape>
+    </types:type>
+  </types:catalog>
+  <types:enrichment select="#2a6eed25-7b15-4983-a4ff-f69e5b2ce396">
+    <types:processor-declaration>
+      <types:input-event>
+        <types:message>
+          <types:payload type="contact"/>
+        </types:message>
+      </types:input-event>
+    </types:processor-declaration>
+  </types:enrichment>
+  <types:enrichment select="#93fcce8b-fa7d-491d-9fb2-9e9a3d0f3acf">
+    <types:processor-declaration>
+      <types:input-event>
+        <types:message>
+          <types:payload type="meta_data"/>
+        </types:message>
+      </types:input-event>
+    </types:processor-declaration>
+  </types:enrichment>
+</types:mule>
