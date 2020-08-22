@@ -1,0 +1,59 @@
+#%RAML 1.0
+baseUri: https://anypoint.mulesoft.com/mocking/api/v1/links/358e3f6d-35b7-4751-a6e9-c2197e6d1101/ # 
+title: CountryInfoService_API
+
+description: This API provides basic information services about countries!
+resourceTypes:
+  collection: !include ResourcesTypes/collection.raml
+types:
+  dataType: !include Type/CountryISOCode.raml
+  capitalCity: !include Type/capitalCity.raml
+  countryCurrency: !include Type/countryCurrency.raml
+  countryintPhoneCode: !include Type/CountryIntPhoneCode.raml
+  LanguageName: !include Type/LanguageName.raml
+traits:
+  countrytrait: !include traits/countrytrait.raml
+  sISOCode: !include traits/sISOCode.raml
+  countryName: !include traits/countrname.raml
+
+/CountryISOCode:
+  description: codeThis function tries to found a country based on the passed country name
+  is: [countryName]  
+  type:   
+    collection:
+      getResponsetype: dataType
+      examplereference1: !include Examples/countryISOCode.raml
+
+/CapitalCity:
+  description: Returns the  name of the captial city for the passed country code
+  is: [countrytrait]
+  type: 
+    collection:
+      getResponsetype: capitalCity
+      examplereference1:  !include Examples/CapitalCity.raml 
+    
+/CountryCurrency:
+  description:  Returns the currency ISO code and name for the passed country ISO code
+  is: [countrytrait]
+  type: 
+    collection:
+      getResponsetype: countryCurrency
+      examplereference1: !include Examples/CountryCurrency.raml
+           
+/CountryIntPhoneCode:
+  description: Returns the internation phone code for the passed ISO country code
+  is: [countrytrait]
+  type: 
+    collection:
+      getResponsetype: countryintPhoneCode
+      examplereference1: !include Examples/CountryIntPhoneCode.raml
+
+/LanguageName:
+  description: Find a language name based on the passed ISO language code
+  is: [sISOCode]
+  type: 
+    collection:
+      getResponsetype: LanguageName
+      examplereference1: !include Examples/LanguageName.raml
+
+

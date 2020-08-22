@@ -1,0 +1,10 @@
+http:
+  host : "localhost"
+  port: "8086"
+webservice:
+  wsdllocation : "http://webservices.oorsprong.org/websamples.countryinfo/CountryInfoService.wso?WSDL"
+  service : ""
+  port : ""
+  address : ""
+env:
+  dev:
