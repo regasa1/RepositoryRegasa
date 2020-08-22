@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:db="http://www.mulesoft.org/schema/mule/db"
+	xmlns:validation="http://www.mulesoft.org/schema/mule/validation"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/validation http://www.mulesoft.org/schema/mule/validation/current/mule-validation.xsd
+http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="3678189f-c6a8-4a68-a9f6-e7f7cd7af852" >
+		<http:listener-connection host="0.0.0.0" port="9087" />
+	</http:listener-config>
+	<db:config name="Database_Config" doc:name="Database Config" doc:id="6035ae4c-f703-4a2f-8fb5-9762f9076f72" >
+		<db:my-sql-connection host="localhost" port="3306" user="root" password="Regasa092369" database="employee" />
+	</db:config>
+	<flow name="error-handling-propagateFlow" doc:id="93162313-985a-4630-9a83-eba339028426" >
+		<http:listener doc:name="Listener" doc:id="ce338dcf-a3cd-444d-ad0e-46071db4c2ee" config-ref="HTTP_Listener_config" path="/errorhandling">
+			<http:error-response statusCode="#[vars.statuscode]" reasonPhrase="#[vars.statusphrase]">
+				<http:body ><![CDATA[#[%dw 2.0
+output application/json
+---
+{
+	"message":"must be number"
+}]]]></http:body>
+			</http:error-response>
+		</http:listener>
+		<validation:is-number numberType="INTEGER" doc:id="9927c47a-f94c-4d5e-a0a2-e38dd9afb2f6" value="#[attributes.queryParams.number]" message="must be number"/>
+		<db:select doc:id="5ae0e09e-2073-477b-9185-5acd67466c20" config-ref="Database_Config">
+			<db:sql ><![CDATA[select * from employee.products]]></db:sql>
+		</db:select>
+		<ee:transform doc:name="Transform Message" doc:id="78776687-8550-4e02-b216-5ec78e5f94b0" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+"message": "success full"]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<error-handler >
+			<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="2aa1e001-2a5d-406d-be5a-c8bbfb1914a0" >
+				<ee:transform doc:name="Transform Message" doc:id="bd082b60-f4c4-41b7-99c9-961af27d21d4" >
+					<ee:message >
+					</ee:message>
+					<ee:variables >
+						<ee:set-variable variableName="statuscode" ><![CDATA[400]]></ee:set-variable>
+						<ee:set-variable variableName="statusphrase" ><![CDATA["bad request"
+]]></ee:set-variable>
+					</ee:variables>
+				</ee:transform>
+			</on-error-propagate>
+		</error-handler>
+	</flow>
+</mule>
